@@ -68,10 +68,10 @@ The key design rule: **the browser never calls the model provider directly and n
 holds an API key.** It only ever talks to our own same-origin `/api/*` endpoints. The
 serverless Function holds the secret, enforces access + limits, then proxies the call.
 
-> The original prototype called `api.anthropic.com` straight from the browser. That
-> only works inside the Claude.ai artifact sandbox (which injects auth); deployed for
-> real it would either fail or leak the API key to anyone who opened DevTools. Moving
-> the call server-side is the core change here.
+> Why the proxy: calling a model API directly from the browser would expose the API
+> key to anyone who opened DevTools — once the URL leaked, the key could be drained
+> within hours. Keeping every model call server-side is what makes a public,
+> key-backed demo safe to share.
 
 ## Security & abuse controls
 
