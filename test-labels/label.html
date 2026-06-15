@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Test Label Generator</title>
+<style>
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 820px; height: 1180px; overflow: hidden;
+    background: radial-gradient(circle at 50% 30%, #3a3a3c, #1c1c1e);
+    display: flex; align-items: center; justify-content: center;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .label {
+    position: relative;
+    width: 700px; height: 1040px;
+    background: var(--bg, #efe7d3);
+    color: var(--ink, #211b13);
+    border: 10px solid var(--frame, #1c140b);
+    box-shadow: 0 20px 50px rgba(0,0,0,.55);
+    box-sizing: border-box;
+    padding: 40px 44px;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .label::after { /* inner hairline frame */
+    content: ""; position: absolute; inset: 14px;
+    border: 1.5px solid var(--accent, #8a6d3b); pointer-events: none;
+  }
+  .topline { font-family: Arial, sans-serif; font-size: 12px; letter-spacing: .38em;
+    text-transform: uppercase; color: var(--accent, #8a6d3b); margin-top: 6px; }
+  .brand { font-size: 58px; line-height: 1.02; font-weight: 700; letter-spacing: .02em;
+    margin: 14px 8px 6px; text-transform: uppercase; }
+  .brand.small { font-size: 46px; }
+  .rule { width: 64%; height: 2px; background: var(--accent, #8a6d3b); margin: 12px 0 14px;
+    position: relative; }
+  .rule::before, .rule::after { content: "\25C6"; position: absolute; top: -9px;
+    color: var(--accent, #8a6d3b); font-size: 14px; }
+  .rule::before { left: -20px; } .rule::after { right: -20px; }
+  .type { font-style: italic; font-size: 23px; margin: 2px 16px 0; line-height: 1.35; }
+  .vintage { font-family: Arial, sans-serif; font-size: 30px; letter-spacing: .2em;
+    margin-top: 16px; color: var(--accent, #8a6d3b); }
+  .seal { width: 116px; height: 116px; border-radius: 50%;
+    border: 3px double var(--accent, #8a6d3b); display: flex; align-items: center;
+    justify-content: center; margin: 26px 0 8px; }
+  .seal span { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent, #8a6d3b); width: 84px; line-height: 1.5; }
+  .spacer { flex: 1; }
+  .stat { font-family: Arial, sans-serif; font-size: 20px; letter-spacing: .12em;
+    text-transform: uppercase; margin: 4px 0; }
+  .country { font-family: Arial, sans-serif; font-size: 13px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--accent, #8a6d3b); margin-top: 10px; }
+  .producer { font-size: 15px; margin-top: 18px; line-height: 1.5; }
+  .warn { font-family: Arial, Helvetica, sans-serif; font-size: 10.5px; line-height: 1.42;
+    text-align: left; margin-top: 18px; color: #1a1a1a; max-width: 560px; }
+  .warn b { font-weight: 800; }
+  .glare { position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(118deg, rgba(255,255,255,0) 38%, rgba(255,255,255,.62) 49%, rgba(255,255,255,0) 60%); }
+  .skew { transform: rotate(-2.2deg) perspective(1400px) rotateY(7deg); }
+</style>
+</head>
+<body>
+<div id="mount"></div>
+<script>
+const GW = "(1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.";
+
+const THEMES = {
+  bourbon: { bg:'#efe7d3', ink:'#2a1d0e', frame:'#3a2613', accent:'#9c6b2e' },
+  vodka:   { bg:'#f4f6f8', ink:'#1d2733', frame:'#16202b', accent:'#5b7fa6' },
+  gin:     { bg:'#eef2ec', ink:'#1c2a1f', frame:'#1f3326', accent:'#4f7d57' },
+  tequila: { bg:'#f3ecd9', ink:'#3a2e16', frame:'#4a3a1c', accent:'#b08a3e' },
+  wine:    { bg:'#f1e8e4', ink:'#3a1620', frame:'#3a1620', accent:'#7c2d3c' },
+  scotch:  { bg:'#efe6cf', ink:'#2c2110', frame:'#2c2110', accent:'#a07c2c' },
+};
+
+const LABELS = {
+  1: { theme:'bourbon', topline:'Est. 1921 · Small Batch', brand:'Old Tom Distillery',
+       type:'Kentucky Straight Bourbon Whiskey', seal:'Distilled &amp; Bottled By Hand',
+       abv:'45% Alc./Vol. (90 Proof)', contents:'750 mL',
+       producer:'Bottled by Old Tom Distillery<br>Louisville, Kentucky',
+       warnHeader:'GOVERNMENT WARNING:', showWarn:true },
+  2: { theme:'vodka', topline:'Craft Distilled', brand:"Stone's Throw", brandSmall:true,
+       type:'Premium Craft Vodka', seal:'Distilled Five Times',
+       abv:'40% Alc./Vol. (80 Proof)', contents:'750 mL',
+       producer:"Distilled &amp; bottled by Stone's Throw Spirits Co.<br>Portland, Oregon",
+       warnHeader:'GOVERNMENT WARNING:', showWarn:true },
+  3: { theme:'gin', topline:'Botanical · London Dry', brand:'Red Creek',
+       type:'London Dry Gin', seal:'Eleven Botanicals',
+       abv:'47% Alc./Vol. (94 Proof)', contents:'750 mL',
+       producer:'Distilled by Red Creek Distillers<br>Asheville, North Carolina',
+       warnHeader:'Government Warning:', showWarn:true },   /* title-case header -> REVIEW */
+  4: { theme:'tequila', topline:'100% de Agave', brand:'Silver Birch',
+       type:'Tequila Blanco', seal:'Estate Grown Agave',
+       abv:'40% Alc./Vol. (80 Proof)', contents:'750 mL', country:'Product of Mexico',
+       producer:'Destileria Silver Birch<br>Jalisco, Mexico',
+       showWarn:false },   /* no government warning -> REJECTED */
+  5: { theme:'wine', topline:'Estate Bottled', brand:'Crimson Ridge', brandSmall:true,
+       type:'Napa Valley Cabernet Sauvignon', vintage:'2021', seal:'Hand Harvested',
+       abv:'13.5% Alc./Vol.', contents:'750 mL',
+       producer:'Produced &amp; bottled by Crimson Ridge Vineyards<br>Napa, California',
+       warnHeader:'GOVERNMENT WARNING:', showWarn:true },
+  6: { theme:'scotch', topline:'Aged · Speyside', brand:'Highland Mist',
+       type:'Blended Scotch Whisky', seal:'Aged 12 Years',
+       abv:'43% Alc./Vol. (86 Proof)', contents:'700 mL', country:'Product of Scotland',
+       producer:'Highland Mist Distillers Ltd.<br>Speyside, Scotland',
+       warnHeader:'GOVERNMENT WARNING:', showWarn:true, glare:true },
+};
+
+const params = new URLSearchParams(location.search);
+const d = LABELS[params.get('id') || '1'];
+const t = THEMES[d.theme];
+
+const css = `--bg:${t.bg};--ink:${t.ink};--frame:${t.frame};--accent:${t.accent}`;
+const warnHtml = d.showWarn
+  ? `<div class="warn"><b>${d.warnHeader}</b> ${GW}</div>`
+  : `<div class="warn" style="opacity:.0">.</div>`;
+
+document.getElementById('mount').innerHTML = `
+  <div class="label ${d.glare ? 'skew' : ''}" style="${css}">
+    <div class="topline">${d.topline || ''}</div>
+    <div class="brand ${d.brandSmall ? 'small' : ''}">${d.brand}</div>
+    <div class="rule"></div>
+    <div class="type">${d.type}</div>
+    ${d.vintage ? `<div class="vintage">${d.vintage}</div>` : ''}
+    <div class="seal"><span>${d.seal}</span></div>
+    <div class="spacer"></div>
+    <div class="stat">${d.abv}</div>
+    <div class="stat">${d.contents}</div>
+    ${d.country ? `<div class="country">${d.country}</div>` : ''}
+    <div class="producer">${d.producer}</div>
+    ${warnHtml}
+    ${d.glare ? '<div class="glare"></div>' : ''}
+  </div>`;
+</script>
+</body>
+</html>

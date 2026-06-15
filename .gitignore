@@ -6,3 +6,6 @@ dist/
 .wrangler/
 *.log
 .DS_Store
+
+# Downloaded real test labels (licensing varies — kept local)
+test-labels/real/
