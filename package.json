@@ -1,0 +1,24 @@
+{
+  "name": "ttb-label-verifier",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-powered TTB alcohol label compliance verifier. Cloudflare Pages + Functions with a pluggable vision model (Gemini / Claude / Ollama).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "pages:dev": "wrangler pages dev dist --kv RATE_LIMIT --compatibility-date 2024-11-01",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11",
+    "wrangler": "^3.90.0"
+  }
+}

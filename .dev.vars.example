@@ -1,0 +1,37 @@
+# ── Server-side secrets/config for LOCAL `wrangler pages dev` ─────────────────
+# Copy this file to `.dev.vars` (gitignored) and fill in values.
+#
+# In PRODUCTION, set these in the Cloudflare dashboard
+#   Pages project > Settings > Environment variables (+ "Encrypt" the secrets)
+# or with: npx wrangler pages secret put <NAME>
+# NEVER commit real keys.
+
+# Which model backend to use: gemini | claude | ollama
+PROVIDER=gemini
+
+# Shared access code reviewers must enter to use the tool.
+# Leave blank to run OPEN (no gate) during local dev.
+ACCESS_CODE=demo-code-change-me
+
+# ── Gemini (default, free tier) ──────────────────────────────────────────────
+# Get a key at https://aistudio.google.com/apikey
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-2.0-flash
+
+# ── Claude (optional premium path; flip PROVIDER=claude) ─────────────────────
+ANTHROPIC_API_KEY=
+ANTHROPIC_MODEL=claude-haiku-4-5-20251001
+
+# ── Ollama (optional local path; flip PROVIDER=ollama) ───────────────────────
+# NOTE: Cloudflare's edge cannot reach localhost. This only works under local
+# `wrangler pages dev` or a self-hosted deployment on the same network.
+OLLAMA_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.2-vision
+
+# ── Rate limiting (active only when a RATE_LIMIT KV namespace is bound) ───────
+RL_GLOBAL_PER_DAY=200
+RL_IP_PER_HOUR=20
+MAX_IMAGE_MB=5
+
+# ── Optional Cloudflare Turnstile bot protection ─────────────────────────────
+TURNSTILE_SECRET=

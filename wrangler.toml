@@ -1,0 +1,26 @@
+name = "ttb-label-verifier"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-11-01"
+
+# Non-secret config. Secrets (GEMINI_API_KEY, ANTHROPIC_API_KEY, ACCESS_CODE,
+# TURNSTILE_SECRET) must be set via the dashboard or `wrangler pages secret put`,
+# never committed here.
+[vars]
+PROVIDER = "gemini"
+GEMINI_MODEL = "gemini-2.0-flash"
+RL_GLOBAL_PER_DAY = "200"
+RL_IP_PER_HOUR = "20"
+MAX_IMAGE_MB = "5"
+
+# Rate limiting turns on automatically once a KV namespace named RATE_LIMIT is
+# bound. Without it the app still works — it just doesn't throttle.
+#
+# Create the namespace:
+#   npx wrangler kv namespace create RATE_LIMIT
+# Then bind it in the dashboard (Pages > Settings > Functions > KV namespace
+# bindings: variable RATE_LIMIT -> your namespace), OR uncomment and fill below
+# for wrangler-based deploys:
+#
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "REPLACE_WITH_KV_NAMESPACE_ID"
