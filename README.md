@@ -171,7 +171,7 @@ Server-side (set in the Cloudflare dashboard for production, `.dev.vars` for loc
 | `PROVIDER` | `gemini` | `gemini` \| `claude` \| `ollama` |
 | `ACCESS_CODE` | *(unset = open)* | Shared code reviewers must enter |
 | `GEMINI_API_KEY` | — | Gemini key (when `PROVIDER=gemini`) |
-| `GEMINI_MODEL` | `gemini-2.0-flash` | Override the Gemini model id |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | Override the Gemini model id |
 | `ANTHROPIC_API_KEY` | — | Claude key (when `PROVIDER=claude`) |
 | `ANTHROPIC_MODEL` | `claude-haiku-4-5-20251001` | Override the Claude model id |
 | `OLLAMA_URL` / `OLLAMA_MODEL` | `localhost:11434` / `llama3.2-vision` | Local Ollama |

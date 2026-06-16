@@ -13,7 +13,7 @@ const endpoint = (model) =>
 export async function extract(base64, mediaType, env) {
   const key = env.GEMINI_API_KEY;
   if (!key) throw httpError(500, 'GEMINI_API_KEY is not configured on the server');
-  const model = env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const model = env.GEMINI_MODEL || 'gemini-2.5-flash';
 
   const res = await fetch(`${endpoint(model)}?key=${encodeURIComponent(key)}`, {
     method: 'POST',

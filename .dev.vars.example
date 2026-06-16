@@ -16,7 +16,7 @@ ACCESS_CODE=demo-code-change-me
 # ── Gemini (default, free tier) ──────────────────────────────────────────────
 # Get a key at https://aistudio.google.com/apikey
 GEMINI_API_KEY=
-GEMINI_MODEL=gemini-2.0-flash
+GEMINI_MODEL=gemini-2.5-flash
 
 # ── Claude (optional premium path; flip PROVIDER=claude) ─────────────────────
 ANTHROPIC_API_KEY=
